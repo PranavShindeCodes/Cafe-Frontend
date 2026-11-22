@@ -469,160 +469,237 @@ function MenuPage() {
       )}
 
       {cart.length > 0 && (
-        <button
-          className="floating-cart"
-          onClick={() => setShowCart(true)}
-        >
-          <ShoppingCart size={18} />
-          {cart.reduce((s, i) => s + i.quantity, 0)}
-        </button>
+        <div className="swiggy-bottom-bar" onClick={() => setShowCart(true)}>
+          <div className="swiggy-bottom-bar-left">
+            <span className="swiggy-bottom-items">{cart.reduce((s, i) => s + i.quantity, 0)} item{cart.reduce((s, i) => s + i.quantity, 0) > 1 ? 's' : ''}</span>
+            <span className="swiggy-bottom-total">₹{cartTotal}</span>
+          </div>
+          <div className="swiggy-bottom-bar-right">
+            VIEW CART <ShoppingCart size={16} />
+          </div>
+        </div>
       )}
 
       <button
-        className="floating-orders"
+        className="swiggy-fab-orders"
         onClick={() => {
           setShowOrders(true);
-          loadOrders(); // 🔥 force refresh
+          loadOrders();
         }}
       >
         <ClipboardList size={18} />
-        {pendingCount}
+        {pendingCount > 0 && <span className="swiggy-fab-badge">{pendingCount}</span>}
       </button>
 
       {showCart && (
-        <div className="cart-sidebar">
-          <h2>Your Cart</h2>
-          {cart.map(i => (
-            <div key={i._id}>
-              {i.title} × {i.quantity} = {i.price * i.quantity}
+        <div className="swiggy-overlay" onClick={() => setShowCart(false)}>
+          <div className="swiggy-cart" onClick={e => e.stopPropagation()}>
+            {/* Cart Header */}
+            <div className="swiggy-cart-header">
+              <div className="swiggy-cart-header-left">
+                <ShoppingCart size={20} />
+                <div>
+                  <h2>Cart</h2>
+                  <span className="swiggy-cart-count">{cart.reduce((s, i) => s + i.quantity, 0)} items</span>
+                </div>
+              </div>
+              <button className="swiggy-close-btn" onClick={() => setShowCart(false)}>✕</button>
             </div>
-          ))}
-          <h3>Total ₹{cartTotal}</h3>
-          <div className="form-group">
-            <label>Spice Level</label>
-            <select
-              value={spiceLevel}
-              onChange={(e) => setSpiceLevel(e.target.value)}
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
+
+            {/* Cart Items */}
+            <div className="swiggy-cart-items">
+              {cart.map(i => (
+                <div key={i._id} className="swiggy-cart-item">
+                  <div className="swiggy-cart-item-left">
+                    <span className={`swiggy-veg-dot ${i.category === 'veg' ? 'veg' : 'non-veg'}`}></span>
+                    <span className="swiggy-cart-item-name">{i.title}</span>
+                  </div>
+                  <div className="swiggy-cart-item-right">
+                    <div className="swiggy-qty-stepper">
+                      <button onClick={() => decrease(i)}><Minus size={12} /></button>
+                      <span>{i.quantity}</span>
+                      <button onClick={() => increase(i)}><Plus size={12} /></button>
+                    </div>
+                    <span className="swiggy-cart-item-price">₹{i.price * i.quantity}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Special Instructions */}
+            <div className="swiggy-instructions">
+              <div className="swiggy-instruction-row">
+                <label>🌶️ Spice Level</label>
+                <div className="swiggy-spice-pills">
+                  {["low", "medium", "high"].map(level => (
+                    <button
+                      key={level}
+                      className={`swiggy-spice-pill ${spiceLevel === level ? 'active' : ''}`}
+                      onClick={() => setSpiceLevel(level)}
+                    >
+                      {level.charAt(0).toUpperCase() + level.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="swiggy-instruction-row">
+                <label>📝 Special Instructions</label>
+                <input
+                  type="text"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="e.g. Less oil, extra cheese..."
+                  className="swiggy-instruction-input"
+                />
+              </div>
+            </div>
+
+            {/* Bill Details */}
+            <div className="swiggy-bill">
+              <h4>Bill Details</h4>
+              <div className="swiggy-bill-row">
+                <span>Item Total</span>
+                <span>₹{cartTotal}</span>
+              </div>
+              <div className="swiggy-bill-row swiggy-bill-total">
+                <span>TO PAY</span>
+                <span>₹{cartTotal}</span>
+              </div>
+            </div>
+
+            {/* Place Order CTA */}
+            <button className="swiggy-place-order-btn" onClick={placeOrder}>
+              <span>Place Order</span>
+              <span>₹{cartTotal} →</span>
+            </button>
           </div>
-          <div className="form-group">
-            <label>Description</label>
-            <input
-              type="text"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Description"
-            />
-          </div>
-          <button onClick={placeOrder}>Place Order</button>
-          <button onClick={() => setShowCart(false)}>Close</button>
         </div>
       )}
 
       {showOrders && (
-        <div className="order-slider">
-          <div className="order-header">
-            <h2>Your Orders</h2>
-            <button onClick={() => setShowOrders(false)}>Close</button>
-            {orderTime && (
-              <div className="order-time">
-                🕒 Ordered at: {orderTime.toLocaleTimeString([], {
-                  hour: "numeric",
-                  minute: "2-digit",
-                  hour12: true
-                })}
+        <div className="swiggy-overlay" onClick={() => setShowOrders(false)}>
+          <div className="swiggy-orders-panel" onClick={e => e.stopPropagation()}>
+            {/* Orders Header */}
+            <div className="swiggy-orders-header">
+              <div className="swiggy-orders-header-left">
+                <ClipboardList size={20} />
+                <div>
+                  <h2>Live Orders</h2>
+                  {orderTime && (
+                    <span className="swiggy-orders-time">
+                      Last order at {orderTime.toLocaleTimeString([], {
+                        hour: "numeric",
+                        minute: "2-digit",
+                        hour12: true
+                      })}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <button className="swiggy-close-btn" onClick={() => setShowOrders(false)}>✕</button>
+            </div>
+
+            {/* Orders List */}
+            <div className="swiggy-orders-list">
+              {activeOrders.length === 0 ? (
+                <div className="swiggy-empty-orders">
+                  <div className="swiggy-empty-icon">🍽️</div>
+                  <h3>No active orders</h3>
+                  <p>Your orders will appear here</p>
+                </div>
+              ) : (
+                activeOrders.map(order => {
+                  const orderedTime = order.orderedAt
+                    ? new Date(order.orderedAt).getTime()
+                    : Date.now();
+                  const now = Date.now();
+
+                  const cancelDuration = 5 * 60 * 1000;
+                  const timePassed = now - orderedTime;
+                  const timeLeft = cancelDuration - timePassed;
+
+                  const canDelete = timeLeft > 0 && !order.delivered;
+
+                  const minutes = Math.floor((timeLeft / 1000 / 60) % 60);
+                  const seconds = Math.floor((timeLeft / 1000) % 60);
+
+                  const formattedTime =
+                    timeLeft > 0
+                      ? `${minutes.toString().padStart(2, "0")}:${seconds
+                        .toString()
+                        .padStart(2, "0")}`
+                      : "00:00";
+
+                  return (
+                    <div key={`${order.bookingId}-${order.foodId}-${order.orderedAt}`} className="swiggy-order-card">
+                      {/* Status indicator bar */}
+                      <div className={`swiggy-order-status-bar ${order.delivered ? 'delivered' : 'preparing'}`}></div>
+
+                      <div className="swiggy-order-card-body">
+                        {/* Top row: item info + price */}
+                        <div className="swiggy-order-top">
+                          <div className="swiggy-order-item-info">
+                            <span className="swiggy-order-item-name">{order.title}</span>
+                            <span className="swiggy-order-item-qty">× {order.quantity}</span>
+                          </div>
+                          <span className="swiggy-order-item-price">₹{order.price * order.quantity}</span>
+                        </div>
+
+                        {/* Status + Time row */}
+                        <div className="swiggy-order-mid">
+                          <div className={`swiggy-status-chip ${order.delivered ? 'delivered' : 'pending'}`}>
+                            <span className="swiggy-status-dot"></span>
+                            {order.delivered ? 'Delivered' : 'Preparing'}
+                          </div>
+                          <span className="swiggy-order-time-stamp">
+                            {new Date(order.orderedAt).toLocaleTimeString([], {
+                              hour: "numeric",
+                              minute: "2-digit",
+                              hour12: true
+                            })}
+                          </span>
+                        </div>
+
+                        {/* Cancel section */}
+                        {!order.delivered && (
+                          <div className="swiggy-order-bottom">
+                            {canDelete ? (
+                              <div className="swiggy-cancel-row">
+                                <div className="swiggy-cancel-timer">
+                                  <span className="swiggy-timer-value">{formattedTime}</span>
+                                  <span className="swiggy-timer-label">left to cancel</span>
+                                </div>
+                                <button
+                                  className="swiggy-cancel-btn"
+                                  onClick={() => cancelOrder(order.bookingId, order.foodId)}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="swiggy-expired-label">
+                                Cancel window expired
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* Bill Summary */}
+            {activeOrders.length > 0 && (
+              <div className="swiggy-orders-total">
+                <div className="swiggy-orders-total-row">
+                  <span>Total Bill</span>
+                  <span className="swiggy-orders-total-amount">₹{orderTotal}</span>
+                </div>
               </div>
             )}
           </div>
-
-          {activeOrders.length === 0 ? (
-            <p>No orders yet</p>
-          ) : (
-            activeOrders.map(order => {
-              const orderedTime = order.orderedAt
-                ? new Date(order.orderedAt).getTime()
-                : Date.now();
-              const now = Date.now();
-
-              const cancelDuration = 5 * 60 * 1000; // 5 minutes in ms
-              const timePassed = now - orderedTime;
-              const timeLeft = cancelDuration - timePassed;
-
-              const canDelete = timeLeft > 0 && !order.delivered;
-
-              const minutes = Math.floor((timeLeft / 1000 / 60) % 60);
-              const seconds = Math.floor((timeLeft / 1000) % 60);
-
-              const formattedTime =
-                timeLeft > 0
-                  ? `${minutes.toString().padStart(2, "0")}:${seconds
-                    .toString()
-                    .padStart(2, "0")}`
-                  : "00:00";
-              return (
-                <div key={`${order.bookingId}-${order.foodId}-${order.orderedAt}`} className="order-card">
-
-                  <div className="order-row">
-                    <div>
-                      <strong>{order.title}</strong> × {order.quantity}
-                    </div>
-
-                    <div className="order-item-amount">
-                      ₹{order.price * order.quantity}
-                    </div>
-                  </div>
-
-                  <div className="order-meta">
-                    🕒 Ordered at: {new Date(order.orderedAt).toLocaleTimeString([], {
-                      hour: "numeric",
-                      minute: "2-digit",
-                      hour12: true
-                    })}
-
-                    {!order.delivered && (
-                      <div className="countdown-timer">
-                        ⏳ Cancel in: {formattedTime}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="order-status">
-                    {order.delivered ? (
-                      <span className="delivered-badge">✅ Delivered</span>
-                    ) : (
-                      <span className="pending-badge">⏳ Pending</span>
-                    )}
-                  </div>
-
-                  {canDelete ? (
-                    <button
-                      className="delete-order-btn"
-                      onClick={() =>
-                        cancelOrder(order.bookingId, order.foodId)
-                      }
-                    >
-                      🗑 Cancel Order
-                    </button>
-                  ) : !order.delivered ? (
-                    <div className="expired-text">
-                      ❌ Cancel time expired
-                    </div>
-                  ) : null}
-
-                </div>
-              );
-            })
-          )}
-
-          {activeOrders.length > 0 && (
-            <div className="order-total-box">
-              <h3>Total Amount: ₹{orderTotal}</h3>
-            </div>
-          )}
         </div>
       )}
     </div>

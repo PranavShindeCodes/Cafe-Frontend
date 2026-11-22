@@ -1,504 +1,469 @@
-/* admin.css - Clean UI with Warm Brown Restaurant Theme */
+/* ============================================================
+   Admin Dashboard — orange & white design system
+   ============================================================ */
 
-/* Reset and Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  /* ===== Primary Colors - Warm Brown Restaurant Theme ===== */
-  --primary-color: #8B4513;      /* Saddle Brown - Main brand color */
-  --primary-light: #FDF1E6;      /* Linen - Light background variant */
-  --primary-soft: #DEB887;       /* Burly Wood - Soft accent */
-  --primary-dark: #5D2E0F;       /* Dark Brown - Deep contrast */
-  
-  /* ===== Status Colors ===== */
-  --success-bg: #E8F5E9;         /* Success background */
-  --success-color: #2E7D32;      /* Success green */
-  --success-dark: #1B5E20;       /* Dark success */
-  --warning-bg: #FFF3E0;         /* Warning background */
-  --warning-color: #F57C00;      /* Warning orange */
-  --danger-bg: #FFEBEE;          /* Danger background */
-  --danger-color: #C62828;       /* Danger red */
-  --danger-dark: #8B1E1E;        /* Dark danger */
-  
-  /* ===== Neutral Colors ===== */
-  --text-dark: #2C3E50;          /* Primary text - Dark blue-gray */
-  --text-light: #6C757D;         /* Secondary text */
-  --text-muted: #95A5A6;         /* Muted text */
-  --text-white: #FFFFFF;          /* Light text */
-  
-  /* ===== Background Colors ===== */
-  --bg-light: #FAF4EC;            /* Cream - Page background */
-  --bg-white: #FFFFFF;            /* Pure white */
-  --bg-soft: #FEF9F4;             /* Soft cream background */
-  --bg-hover: #FDF3E8;            /* Hover state - Light brown tint */
-  --bg-dark: #5D2E0F;             /* Dark brown for backgrounds */
-  
-  /* ===== Border Colors ===== */
-  --border-color: #E9D9C8;        /* Regular borders - Light brown */
-  --border-light: #F0E4D6;        /* Light borders */
-  --border-bold: #D4BC9E;         /* Bold borders */
-  
-  /* ===== Shadow System ===== */
-  --shadow-sm: 0 2px 4px rgba(139, 69, 19, 0.05);
-  --shadow-md: 0 4px 6px rgba(139, 69, 19, 0.1);
-  --shadow-lg: 0 8px 16px rgba(139, 69, 19, 0.15);
-  --shadow-xl: 0 12px 24px rgba(139, 69, 19, 0.2);
-  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-  
-  /* ===== Border Radius ===== */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-full: 9999px;
-  
-  /* ===== Transitions ===== */
-  --transition: all 0.3s ease;
-  --transition-fast: 150ms ease;
-  --transition-base: 250ms ease;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-  background: var(--bg-light);
-  color: var(--text-dark);
-  line-height: 1.5;
-}
-
-/* 🔒 Lock background scroll when modal is open */
 body.modal-open {
   overflow: hidden;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden; 
-}
+/* ---------- Loading ---------- */
 
-/* ================= LOADING STATE ================= */
 .loading {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  font-size: 1rem;
-  color: var(--primary-dark);
-  background: var(--bg-light);
+  background: var(--bg);
+  color: var(--text-2);
+  font-weight: 500;
+  position: relative;
 }
 
 .loading::after {
   content: '';
-  width: 20px;
-  height: 20px;
-  margin-left: 10px;
-  border: 2px solid var(--primary-soft);
-  border-top-color: var(--primary-dark);
+  width: 34px;
+  height: 34px;
+  border: 3px solid var(--primary-soft);
+  border-top-color: var(--primary);
   border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+  position: absolute;
+  margin-top: 52px;
+  animation: adminSpin 0.8s linear infinite;
 }
 
-@keyframes spin {
+@keyframes adminSpin {
   to { transform: rotate(360deg); }
 }
 
-/* ================= ADMIN DASHBOARD ================= */
+/* ---------- Page shell ---------- */
+
 .admin-dashboard {
   min-height: 100vh;
-  background: var(--bg-light);
+  background: var(--bg);
+  padding-bottom: 60px;
 }
 
-/* ================= HEADER ================= */
+/* ---------- Header ---------- */
+
 .dashboard-header {
-  background: var(--bg-white);
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: var(--shadow-sm);
-  border-bottom: 2px solid var(--primary-soft);
   position: sticky;
   top: 0;
   z-index: 50;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px clamp(18px, 4vw, 40px);
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 12px;
+  min-width: 0;
 }
 
 .header-left h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--primary-dark);
-  margin-left: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .header-right {
   display: flex;
   align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .logout-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
-  background: var(--danger-color);
-  color: var(--text-white);
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
+  gap: 8px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--white);
+  color: var(--text-2);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 999px;
   transition: var(--transition);
 }
 
 .logout-btn:hover {
-  background: var(--danger-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-soft);
 }
 
-/* ================= MAIN CONTENT ================= */
+/* ---------- Layout ---------- */
+
 .dashboard-content {
-  max-width: 1400px;
-  margin: 2rem auto;
-  padding: 0 2rem;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 26px clamp(16px, 3.5vw, 36px) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
 }
 
-/* ================= HOTEL PROFILE ================= */
+/* ---------- Hotel profile card ---------- */
+
 .hotel-profile-section {
-  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
 
 .hotel-profile-card {
-  background: var(--bg-white);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
-  margin-bottom: 2rem;
+  overflow: hidden;
 }
 
 .hotel-cover-image {
   position: relative;
-  height: 200px;
+  height: 210px;
   background: var(--primary-soft);
-  overflow: hidden;
 }
 
 .hotel-cover-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .edit-cover-btn {
   position: absolute;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: 16px;
+  right: 16px;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
-  background: var(--bg-white);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  color: var(--primary-dark);
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
+  gap: 8px;
+  background: var(--white);
+  color: var(--text);
+  border: none;
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-md);
   transition: var(--transition);
-  box-shadow: var(--shadow-sm);
 }
 
 .edit-cover-btn:hover {
-  background: var(--primary-color);
-  color: var(--text-white);
-  border-color: var(--primary-dark);
+  background: var(--primary);
+  color: var(--white);
+  transform: translateY(-1px);
 }
 
 .hotel-info {
-  padding: 1.5rem;
-}
-
-.hotel-name-section {
-  margin-bottom: 1.5rem;
+  padding: 22px clamp(18px, 3vw, 30px) 26px;
 }
 
 .hotel-name-section h2 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--primary-dark);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 16px;
 }
 
 .hotel-details-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  background: var(--bg-light);
-  padding: 1.25rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
 }
 
 .detail-item {
+  background: var(--primary-softer);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 2px;
+  min-width: 0;
 }
 
 .detail-label {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  font-size: 0.74rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-weight: 600;
+  color: var(--text-2);
 }
 
 .detail-value {
-  font-size: 1rem;
-  color: var(--primary-dark);
-  font-weight: 500;
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--text);
+  word-break: break-word;
 }
 
-/* ================= STATISTICS CARDS ================= */
+/* ---------- Stats ---------- */
+
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
 }
 
 .stat-card {
-  background: var(--bg-white);
-  padding: 1.25rem;
-  border-radius: var(--radius-md);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  padding: 20px;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  border: 1px solid var(--border-color);
+  gap: 16px;
   transition: var(--transition);
 }
 
 .stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-sm);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
+  flex-shrink: 0;
 }
 
 .stat-icon.total {
-  background: var(--primary-color);
-  color: var(--text-white);
+  background: var(--primary-soft);
+  color: var(--primary);
 }
 
 .stat-icon.available {
-  background: var(--success-bg);
-  color: var(--success-color);
+  background: var(--success-soft);
+  color: var(--success);
 }
 
 .stat-icon.veg {
-  background: var(--success-bg);
-  color: var(--success-color);
+  background: #e8f7ec;
 }
 
 .stat-icon.nonveg {
-  background: var(--danger-bg);
-  color: var(--danger-color);
+  background: var(--danger-soft);
 }
 
 .stat-content {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .stat-value {
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--primary-dark);
-  line-height: 1.2;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 .stat-label {
-  font-size: 0.875rem;
-  color: var(--text-muted);
+  font-size: 0.82rem;
+  color: var(--text-2);
+  font-weight: 500;
 }
 
-/* ================= ACTION BUTTONS ================= */
+/* ---------- Quick actions ---------- */
+
+.admin-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
 .booking-page-btn,
 .generate-qr-btn {
-  width: 100%;
-  padding: 0.875rem;
-  margin-bottom: 0.75rem;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--white);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 15px 18px;
+  border-radius: var(--radius-lg);
   transition: var(--transition);
-  background: var(--bg-white);
-  border: 1px solid var(--border-color);
-  color: var(--primary-dark);
+  box-shadow: var(--shadow-sm);
 }
 
 .booking-page-btn:hover,
 .generate-qr-btn:hover {
-  background: var(--primary-light);
-  border-color: var(--primary-color);
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary-dark);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
-  color: var(--primary-dark);
 }
 
-/* ================= FOOD MANAGEMENT ================= */
+.generate-qr-btn {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+}
+
+.generate-qr-btn:hover {
+  background: var(--primary-dark);
+  color: var(--white);
+}
+
+/* ---------- Food management ---------- */
+
 .food-management-section {
-  margin-top: 3rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  padding: clamp(18px, 3vw, 28px);
 }
 
 .section-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid var(--border-color);
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
 }
 
 .section-title h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  /* color: var(--primary-dark); */
-  margin-bottom: 0.25rem;
-}
-
-#color {
-  background-color:#fef9f4;
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .section-title p {
-  color: var(--text-muted);
-  font-size: 0.9rem;
+  color: var(--text-2);
+  font-size: 0.88rem;
+  margin-top: 2px;
+}
+
+#color {
+  position: relative;
+  padding-left: 14px;
+}
+
+#color::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 4px;
+  border-radius: 4px;
+  background: var(--primary);
 }
 
 .add-food-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: var(--primary-color);
-  color: var(--text-white);
+  gap: 8px;
+  background: var(--primary);
+  color: var(--white);
   border: none;
-  border-radius: var(--radius-md);
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 14px rgba(252, 128, 25, 0.3);
   transition: var(--transition);
+  white-space: nowrap;
 }
 
 .add-food-btn:hover {
   background: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(233, 107, 12, 0.35);
 }
 
-/* ================= EMPTY STATE ================= */
+/* Empty state */
 .empty-state {
   text-align: center;
-  padding: 4rem 2rem;
-  background: var(--bg-white);
+  padding: 54px 20px;
+  border: 2px dashed var(--border-strong);
   border-radius: var(--radius-lg);
-  border: 2px dashed var(--border-color);
+  background: var(--primary-softer);
 }
 
 .empty-state svg {
-  color: var(--primary-soft);
-  margin-bottom: 1rem;
-  width: 64px;
-  height: 64px;
-  opacity: 0.7;
+  color: var(--primary);
+  margin-bottom: 14px;
 }
 
 .empty-state h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--primary-dark);
-  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
 }
 
 .empty-state p {
-  color: var(--text-muted);
-  margin-bottom: 1.5rem;
+  color: var(--text-2);
+  font-size: 0.92rem;
+  margin-bottom: 20px;
 }
 
 .add-first-food-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 2rem;
-  background: var(--primary-color);
-  color: var(--text-white);
+  gap: 8px;
+  background: var(--primary);
+  color: var(--white);
   border: none;
-  border-radius: var(--radius-md);
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 12px 22px;
+  border-radius: var(--radius);
   transition: var(--transition);
 }
 
 .add-first-food-btn:hover {
   background: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
-/* ================= FOOD ITEMS GRID ================= */
+/* Food grid + cards */
 .food-items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
-  isolation: isolate;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 18px;
 }
 
 .food-item-card {
-  background: var(--bg-white);
+  background: var(--white);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
-  transition: var(--transition);
   display: flex;
   flex-direction: column;
-  position: relative;
-  z-index: 1;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
 .food-item-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
 }
 
 .food-item-image {
   position: relative;
-  height: 180px;
-  background: var(--primary-light);
+  height: 170px;
+  background: var(--primary-soft);
   overflow: hidden;
 }
 
@@ -506,7 +471,8 @@ html, body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  display: block;
+  transition: transform 0.35s ease;
 }
 
 .food-item-card:hover .food-item-image img {
@@ -515,335 +481,320 @@ html, body {
 
 .food-item-status {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 12px;
+  left: 12px;
 }
 
 .status-badge {
-  display: inline-block;
-  padding: 0.35rem 1rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+  letter-spacing: 0.3px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  background: var(--bg-white);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
 }
 
 .status-badge.available {
-  background: var(--success-color);
-  border-color: var(--success-color);
-  color: var(--text-white);
+  background: var(--success-soft);
+  color: var(--success);
+  border: 1px solid rgba(22, 138, 69, 0.2);
 }
 
 .status-badge.unavailable {
-  background: var(--danger-color);
-  border-color: var(--danger-color);
-  color: var(--text-white);
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid rgba(214, 69, 69, 0.2);
 }
 
 .food-item-content {
-  padding: 1.25rem;
-  flex: 1;
+  padding: 16px 16px 18px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  flex: 1;
 }
 
 .food-item-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.75rem;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .food-item-header h3 {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--primary-dark);
   line-height: 1.3;
 }
 
 .category-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
   font-size: 0.7rem;
-  font-weight: 500;
-  background: var(--bg-light);
-  border: 1px solid var(--border-color);
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .category-badge.veg {
-  background: var(--success-bg);
-  color: var(--success-color);
-  border-color: var(--success-color);
+  background: var(--success-soft);
+  color: var(--success);
 }
 
 .category-badge.non-veg {
-  background: var(--danger-bg);
-  color: var(--danger-color);
-  border-color: var(--danger-color);
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .food-description {
-  font-size: 0.875rem;
-  color: var(--text-dark);
-  margin-bottom: 1rem;
+  color: var(--text-2);
+  font-size: 0.84rem;
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  min-height: 2.5em;
 }
 
 .food-details {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
   align-items: center;
-  margin-bottom: 1rem;
-  padding: 0.75rem 0;
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
 }
 
 .food-price {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--primary-color);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary-dark);
 }
 
-.food-time {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  background: var(--bg-light);
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
-}
-
-.food-spice {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  background: var(--bg-light);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
-  color: var(--text-dark);
+.food-type-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-2);
+  background: var(--primary-softer);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 999px;
 }
 
 .food-item-actions {
   display: flex;
-  gap: 0.5rem;
   align-items: center;
-  margin-top: auto;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
 }
 
 .availability-btn {
   flex: 1;
-  padding: 0.5rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  background: var(--bg-white);
-  color: var(--text-dark);
+  border: none;
   font-size: 0.8rem;
-  font-weight: 500;
-  cursor: pointer;
+  font-weight: 600;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
   transition: var(--transition);
+  white-space: nowrap;
 }
 
 .availability-btn.on {
-  background: var(--success-color);
-  border-color: var(--success-color);
-  color: var(--text-white);
-}
-
-.availability-btn.off {
-  background: var(--danger-color);
-  border-color: var(--danger-color);
-  color: var(--text-white);
+  background: var(--success-soft);
+  color: var(--success);
 }
 
 .availability-btn.on:hover {
-  background: var(--success-dark);
+  background: #d8efe1;
+}
+
+.availability-btn.off {
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .availability-btn.off:hover {
-  background: var(--danger-dark);
+  background: #f9dcdc;
 }
 
 .edit-food-btn,
 .delete-food-btn {
-  padding: 0.5rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  background: var(--bg-white);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--text-2);
+  transition: var(--transition);
+  flex-shrink: 0;
 }
 
 .edit-food-btn:hover {
-  background: var(--primary-light);
-  color: var(--primary-dark);
-  border-color: var(--primary-color);
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-soft);
 }
 
 .delete-food-btn:hover {
-  background: var(--danger-color);
-  color: var(--text-white);
-  border-color: var(--danger-color);
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-soft);
 }
 
-/* ================= MODAL ================= */
+/* ---------- Modals ---------- */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(93, 46, 15, 0.5); /* Primary dark with opacity */
+  background: rgba(40, 44, 63, 0.55);
+  backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: fadeIn 0.2s ease;
-  padding: 1rem;
-  overscroll-behavior: contain;
+  padding: 20px;
+  animation: overlayIn 0.2s ease;
 }
 
-@keyframes fadeIn {
+@keyframes overlayIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 
 .edit-hotel-modal,
 .food-modal {
-  background: var(--bg-white);
-  border-radius: var(--radius-lg);
+  background: var(--white);
+  border-radius: var(--radius-xl);
   width: 100%;
-  max-width: 600px;
+  max-width: 560px;
   max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: var(--shadow-xl);
-  animation: slideUp 0.3s ease;
-  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-overlay);
+  animation: modalIn 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.15);
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .modal-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 2px solid var(--border-color);
-  position: sticky;
-  top: 0;
-  background: var(--bg-white);
-  z-index: 10;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
 .modal-header h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--primary-dark);
+  font-size: 1.15rem;
+  font-weight: 700;
 }
 
 .close-modal {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: var(--radius-sm);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: var(--primary-softer);
+  color: var(--text-2);
   transition: var(--transition);
+  flex-shrink: 0;
 }
 
 .close-modal:hover {
-  background: var(--bg-light);
-  color: var(--danger-color);
+  background: var(--danger-soft);
+  color: var(--danger);
+  transform: rotate(90deg);
 }
 
-/* ================= FORMS ================= */
 .edit-hotel-form,
 .food-form {
-  padding: 1.5rem;
+  padding: 22px 24px 26px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 14px;
 }
 
 .form-group {
-  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--primary-dark);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 0.625rem 0.875rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius);
+  font-size: 0.92rem;
+  background: var(--primary-softer);
+  color: var(--text);
   transition: var(--transition);
-  background: var(--bg-white);
-  color: var(--text-dark);
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.2);
+  border-color: var(--primary);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(252, 128, 25, 0.14);
 }
 
 .form-group textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 76px;
 }
 
-/* ================= TOGGLE SWITCH ================= */
+/* Availability toggle */
 .availability-toggle {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.availability-toggle > span {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-2);
 }
 
 .toggle-switch {
   position: relative;
   display: inline-block;
   width: 48px;
-  height: 24px;
+  height: 26px;
+  flex-shrink: 0;
 }
 
 .toggle-switch input {
@@ -854,204 +805,187 @@ html, body {
 
 .toggle-slider {
   position: absolute;
+  inset: 0;
+  background: #e6dccf;
+  border-radius: 999px;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--text-muted);
   transition: var(--transition);
-  border-radius: 24px;
 }
 
 .toggle-slider:before {
+  content: '';
   position: absolute;
-  content: "";
-  height: 20px;
   width: 20px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  transition: var(--transition);
+  height: 20px;
+  left: 3px;
+  top: 3px;
+  background: var(--white);
   border-radius: 50%;
+  transition: var(--transition);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
 }
 
-input:checked + .toggle-slider {
-  background-color: var(--success-color);
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--primary);
 }
 
-input:checked + .toggle-slider:before {
-  transform: translateX(24px);
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(22px);
 }
 
-/* ================= IMAGE UPLOAD ================= */
+/* Upload areas */
 .upload-area {
-  border: 2px dashed var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--primary-softer);
+  padding: 24px 16px;
   text-align: center;
   cursor: pointer;
   transition: var(--transition);
-  background: var(--bg-light);
+  color: var(--text-2);
 }
 
 .upload-area:hover {
-  border-color: var(--primary-color);
-  background: var(--primary-light);
+  border-color: var(--primary);
+  background: var(--primary-soft);
 }
 
 .upload-area:hover svg {
-  color: var(--primary-dark);
-}
-
-.upload-area:hover p {
-  color: var(--primary-dark);
+  color: var(--primary);
 }
 
 .upload-area svg {
-  color: var(--primary-color);
-  margin-bottom: 0.5rem;
+  color: var(--text-3);
+  margin-bottom: 6px;
   transition: var(--transition);
 }
 
 .upload-area p {
-  color: var(--primary-dark);
-  font-size: 0.875rem;
-  margin-bottom: 0.25rem;
-  transition: var(--transition);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
 }
 
 .upload-area span {
-  color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text-3);
+}
+
+.hotel-image-upload,
+.food-image-upload {
+  width: 100%;
 }
 
 .image-preview {
   position: relative;
-  border-radius: var(--radius-md);
+  width: 100%;
+  border-radius: var(--radius-lg);
   overflow: hidden;
+  border: 1px solid var(--border);
 }
 
 .image-preview img {
   width: 100%;
-  max-height: 200px;
+  height: 150px;
   object-fit: cover;
+  display: block;
 }
 
 .remove-image {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: var(--bg-white);
-  border: 1px solid var(--border-color);
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--danger);
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
   transition: var(--transition);
-  color: var(--text-muted);
 }
 
 .remove-image:hover {
-  background: var(--danger-color);
-  color: var(--text-white);
-  border-color: var(--danger-color);
+  background: var(--danger);
+  color: var(--white);
 }
 
-/* ================= FORM ACTIONS ================= */
+/* Form actions */
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-color);
+  gap: 12px;
+  padding-top: 6px;
 }
 
 .btn-cancel,
 .btn-save {
-  padding: 0.625rem 1.5rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
+  border: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 11px 22px;
+  border-radius: var(--radius);
   transition: var(--transition);
 }
 
 .btn-cancel {
-  background: var(--bg-white);
-  border: 1px solid var(--border-color);
-  color: var(--text-muted);
+  background: var(--primary-softer);
+  color: var(--text-2);
+  border: 1.5px solid var(--border-strong);
 }
 
 .btn-cancel:hover {
-  background: var(--bg-light);
-  border-color: var(--text-muted);
-  color: var(--text-dark);
+  background: var(--danger-soft);
+  color: var(--danger);
+  border-color: rgba(214, 69, 69, 0.35);
 }
 
 .btn-save {
-  background: var(--primary-color);
-  border: 1px solid var(--primary-color);
-  color: var(--text-white);
+  background: var(--primary);
+  color: var(--white);
+  box-shadow: 0 4px 12px rgba(252, 128, 25, 0.3);
 }
 
 .btn-save:hover:not(:disabled) {
   background: var(--primary-dark);
-  border-color: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .btn-save:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* ================= RESPONSIVE DESIGN ================= */
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ---------- Responsive ---------- */
+
 @media (max-width: 1024px) {
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .food-items-grid {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   }
 }
 
 @media (max-width: 768px) {
   .dashboard-header {
-    padding: 1rem;
-    flex-direction: column;
-    gap: 0.75rem;
+    padding: 12px 16px;
   }
 
-  .header-left {
-    width: 100%;
-    justify-content: space-between;
+  .header-left h1 {
+    font-size: 1rem;
   }
 
-  .header-right {
-    width: 100%;
-  }
+  .logout-btn span { display: none; }
 
   .logout-btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .hotel-details-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .add-food-btn {
-    width: 100%;
-    justify-content: center;
+    padding: 9px 12px;
   }
 
   .form-row {
@@ -1059,53 +993,65 @@ input:checked + .toggle-slider:before {
   }
 
   .food-items-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .add-food-btn {
+    justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
   .dashboard-content {
-    padding: 0 1rem;
+    padding: 18px 14px 0;
   }
 
-  .stats-grid {
+  .food-items-grid {
     grid-template-columns: 1fr;
   }
 
-  .food-details {
-    flex-direction: column;
-    align-items: flex-start;
+  .hotel-cover-image {
+    height: 150px;
   }
 
-  .food-item-actions {
-    flex-wrap: wrap;
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 
-  .availability-btn {
-    width: 100%;
+  .stat-card {
+    padding: 14px;
+    gap: 10px;
   }
 
-  .form-actions {
-    flex-direction: column;
+  .stat-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1.15rem;
   }
 
-  .btn-cancel,
-  .btn-save {
-    width: 100%;
+  .stat-value {
+    font-size: 1.25rem;
   }
-}
 
-/* ================= UTILITY CLASSES ================= */
-/* Focus styles */
-:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
+  .admin-actions {
+    grid-template-columns: 1fr;
+  }
 
-/* Disabled states */
-.disabled,
-:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none;
+  .modal-overlay {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .edit-hotel-modal,
+  .food-modal {
+    max-height: 92vh;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
 }

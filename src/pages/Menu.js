@@ -253,6 +253,7 @@ function MenuPage() {
           tableNumber,
           orderType: isRoom ? "room" : "table",
           description, // ✅ added
+          spiceLevel,  // ✅ sent to kitchen via instructions
           items: cart.map(i => ({
             foodId: i._id,
             title: i.title,
@@ -267,6 +268,8 @@ function MenuPage() {
       if (result.success) {
         setCart([]);
         setShowCart(false);
+        setDescription("");
+        setSpiceLevel("medium");
         setOrderMessage("Order placed successfully!");
         setOrderTime(new Date());
 
@@ -296,16 +299,8 @@ function MenuPage() {
       const data = await res.json();
 
       if (data.success) {
-        // remove from UI
-        setActiveOrders(prev =>
-          prev.filter(
-            o =>
-              !(
-                o.bookingId === bookingId &&
-                o.foodId === foodId
-              )
-          )
-        );
+        // ✅ refresh from backend so UI matches server truth
+        loadOrders();
       }
     } catch (err) {
       console.error("Cancel error:", err);
@@ -320,7 +315,7 @@ function MenuPage() {
       ? (food.image.startsWith("http")
         ? food.image
         : `${API}/${food.image.replace(/^\/+/, "")}`)
-      : "/placeholder-food.jpg";
+      : "/placeholder-food.svg";
 
     return (
       <div key={food._id} className="food-card-overlay">
@@ -331,7 +326,7 @@ function MenuPage() {
             alt={food.title}
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = "/placeholder-food.jpg";
+              e.target.src = "/placeholder-food.svg";
             }}
           />
 
@@ -382,8 +377,23 @@ function MenuPage() {
     );
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (!hotel) return <div>Hotel not found</div>;
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+      </div>
+    );
+  }
+  if (!hotel) {
+    return (
+      <div className="menu-container">
+        <div className="hotel-not-found">
+          <h2>Hotel not found</h2>
+          <p>Please scan the QR code again.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="menu-container">

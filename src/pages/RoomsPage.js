@@ -230,6 +230,8 @@ function RoomsPage() {
             setBillData(data.bill);
             setShowBillPopup(true);
 
+        } else {
+            alert(data.message || "No active room order found for this room");
         }
 
     };
@@ -259,6 +261,8 @@ function RoomsPage() {
 
             setOpenRoom(null);
 
+        } else {
+            alert(data.message || "Checkout failed");
         }
 
     };
@@ -291,7 +295,10 @@ function RoomsPage() {
 
     const submitManualOrder = async () => {
 
-        if (cartItems.length === 0) return;
+        if (cartItems.length === 0) {
+            alert("Please add at least one item");
+            return;
+        }
 
         const res = await fetch(`${API}/api/bookings/manual-add`, {
 
@@ -316,6 +323,8 @@ function RoomsPage() {
             setCartItems([]);
             setShowManual(false);
 
+        } else {
+            alert(data.message || "Failed to submit order");
         }
 
     };
@@ -359,6 +368,11 @@ function RoomsPage() {
     };
 
     const roomLogin = async () => {
+
+        if (!customerName.trim() || !personCount) {
+            alert("Please enter customer name and person count");
+            return;
+        }
 
         const res = await fetch(`${API}/api/bookings/room-login`, {
 
@@ -701,19 +715,23 @@ function RoomsPage() {
 
                     <table>
 
-                        <tr>
-                            <th>Item</th>
-                            <th>Qty</th>
-                            <th>Total</th>
-                        </tr>
-
-                        {billData.foodItems?.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.title}</td>
-                                <td>{item.quantity}</td>
-                                <td>₹{item.price * item.quantity}</td>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Qty</th>
+                                <th>Total</th>
                             </tr>
-                        ))}
+                        </thead>
+
+                        <tbody>
+                            {billData.foodItems?.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.title}</td>
+                                    <td>{item.quantity}</td>
+                                    <td>₹{item.price * item.quantity}</td>
+                                </tr>
+                            ))}
+                        </tbody>
 
                     </table>
 

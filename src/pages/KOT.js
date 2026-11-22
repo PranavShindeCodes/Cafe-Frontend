@@ -13,7 +13,7 @@ function KOTPage() {
   const audioRef = useRef(null);
 
   useEffect(() => {
-    audioRef.current = new Audio("/notification.mp3");
+    audioRef.current = new Audio("/notification.wav");
   }, []);
 
   const fetchOrders = useCallback(async () => {
@@ -34,6 +34,25 @@ function KOTPage() {
       setLoading(false);
     }
   }, [hotelId]);
+
+  // 🔔 Play a chime when new pending items arrive
+  const pendingCountRef = useRef(0);
+
+  useEffect(() => {
+    const pending = orders.reduce(
+      (acc, booking) =>
+        acc + booking.orders.filter(item => !item.delivered).length,
+      0
+    );
+
+    if (pending > pendingCountRef.current) {
+      audioRef.current?.play().catch(() => {
+        /* autoplay blocked until user interacts with the page */
+      });
+    }
+
+    pendingCountRef.current = pending;
+  }, [orders]);
 
   const markDelivered = async (bookingId, orderItemId) => {
     try {
@@ -181,7 +200,7 @@ function KOTPage() {
                               hour12: true
                             })}
                             {timeDiff > 10 && (
-                              <span style={{ color: timeDiff > 15 ? 'var(--danger-color)' : 'var(--warning-color)' }}>
+                              <span style={{ color: timeDiff > 15 ? 'var(--danger)' : 'var(--primary-dark)' }}>
                                 {' '}({Math.round(timeDiff)} min)
                               </span>
                             )}

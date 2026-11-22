@@ -78,7 +78,7 @@ const [rooms, setRooms] = useState([]);
   const filteredFoods = foods.filter(food => {
     const search = searchFood.trim().toLowerCase();
     return food.title.toLowerCase().startsWith(search);
-});
+  });
 
   const addToCart = () => {
 
@@ -100,7 +100,10 @@ const [rooms, setRooms] = useState([]);
 
   const submitManualOrder = async () => {
 
-    if (cartItems.length === 0) return;
+    if (cartItems.length === 0) {
+      alert("Please add at least one item");
+      return;
+    }
 
     const res = await fetch(`${API}/api/bookings/manual-add`, {
 
@@ -124,6 +127,8 @@ const [rooms, setRooms] = useState([]);
       setCartItems([]);
       setShowManual(false);
 
+    } else {
+      alert(data.message || "Failed to submit order");
     }
 
   };
@@ -482,7 +487,6 @@ const [rooms, setRooms] = useState([]);
           const bHasOrder = bookings.some(
             bk => bk.number && bk.number.split("-T")[0] === b.sectionName && !bk.kotSent
           );
-
           if (aHasOrder && !bHasOrder) return -1;
           if (!aHasOrder && bHasOrder) return 1;
 
@@ -500,11 +504,11 @@ const [rooms, setRooms] = useState([]);
           ).sort((a, b) => {
 
             const aBookings = bookings.filter(
-              bk => bk.tableNumber === a.tableNumber && bk.status === "active"
+              bk => bk.number === a.tableNumber && bk.status === "active"
             );
 
             const bBookings = bookings.filter(
-              bk => bk.tableNumber === b.tableNumber && bk.status === "active"
+              bk => bk.number === b.tableNumber && bk.status === "active"
             );
 
             const aNew = aBookings.some(bk => !bk.kotSent);
@@ -721,19 +725,23 @@ const [rooms, setRooms] = useState([]);
 
           <table>
 
-            <tr>
-              <th>Item</th>
-              <th>Qty</th>
-              <th>Total</th>
-            </tr>
-
-            {billData.items.map((item, index) => (
-              <tr key={index}>
-                <td>{item.title}</td>
-                <td>{item.quantity}</td>
-                <td>₹{item.price * item.quantity}</td>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Total</th>
               </tr>
-            ))}
+            </thead>
+
+            <tbody>
+              {billData.items.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.title}</td>
+                  <td>{item.quantity}</td>
+                  <td>₹{item.price * item.quantity}</td>
+                </tr>
+              ))}
+            </tbody>
 
           </table>
 

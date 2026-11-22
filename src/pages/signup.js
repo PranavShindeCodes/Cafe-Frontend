@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Hotel, Mail, Lock, MapPin, Building, Globe, ArrowRight,
   Camera, Upload, X, Image as ImageIcon, Users,
+  UtensilsCrossed, QrCode, ConciergeBell,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './signup.css';
@@ -294,6 +295,47 @@ function Signup() {
 
   return (
     <div className="signup-page">
+
+      {/* ============ LEFT — BRAND VISUAL ============ */}
+      <div className="signup-visual">
+        <div className="signup-visual-inner">
+          <div className="brand-badge">
+            <span className="brand-badge-icon">
+              <UtensilsCrossed size={20} />
+            </span>
+            <span className="brand-badge-name">CafeOS</span>
+          </div>
+
+          <h1 className="visual-title">
+            List your hotel on <em>CafeOS.</em>
+          </h1>
+
+          <p className="visual-subtitle">
+            Set up tables, rooms and QR menus in minutes.
+            Start taking orders like a pro.
+          </p>
+
+          <ul className="visual-features">
+            <li>
+              <span className="feature-icon"><Building size={18} /></span>
+              Multi-section table management
+            </li>
+            <li>
+              <span className="feature-icon"><ConciergeBell size={18} /></span>
+              Room service &amp; guest check-in
+            </li>
+            <li>
+              <span className="feature-icon"><QrCode size={18} /></span>
+              Auto-generated QR menus
+            </li>
+          </ul>
+        </div>
+
+        <div className="visual-glow glow-1" />
+        <div className="visual-glow glow-2" />
+        <div className="visual-glow glow-3" />
+      </div>
+
       <div className="signup-container">
         {/* SIGNUP CARD */}
         <div className="signup-card">

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { Hotel, Mail, Lock, LogIn, X } from 'lucide-react';
+import {
+  Hotel, Mail, Lock, LogIn, X, Eye, EyeOff,
+  QrCode, ChefHat, ConciergeBell, UtensilsCrossed,
+} from 'lucide-react';
 import './login.css';
 import {  useNavigate } from 'react-router-dom';
 
@@ -17,6 +20,7 @@ function Login() {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -110,21 +114,55 @@ function Login() {
 
   return (
     <div className="login-page">
-      <div className="background-slideshow">
-        <div className="slide slide1"></div>
-        <div className="slide slide2"></div>
-        <div className="slide slide3"></div>
-      </div>
 
-      <div className="login-container">
-        <div className="login-card">
-          <div className="hotel-icon">
-            <Hotel size={48} />
+      {/* ============ LEFT — BRAND VISUAL ============ */}
+      <div className="login-visual">
+        <div className="login-visual-inner">
+          <div className="brand-badge">
+            <span className="brand-badge-icon">
+              <UtensilsCrossed size={20} />
+            </span>
+            <span className="brand-badge-name">CafeOS</span>
           </div>
 
-          <p className="welcome-text">
-            Welcome back! Please login to your account.
+          <h1 className="visual-title">
+            Run your restaurant <em>beautifully.</em>
+          </h1>
+
+          <p className="visual-subtitle">
+            The all-in-one platform for table ordering, kitchen tickets,
+            room service and billing.
           </p>
+
+          <ul className="visual-features">
+            <li>
+              <span className="feature-icon"><QrCode size={18} /></span>
+              QR-based table ordering
+            </li>
+            <li>
+              <span className="feature-icon"><ChefHat size={18} /></span>
+              Live kitchen tickets (KOT)
+            </li>
+            <li>
+              <span className="feature-icon"><ConciergeBell size={18} /></span>
+              Room service &amp; billing
+            </li>
+          </ul>
+        </div>
+
+        <div className="visual-glow glow-1" />
+        <div className="visual-glow glow-2" />
+        <div className="visual-glow glow-3" />
+      </div>
+
+      {/* ============ RIGHT — LOGIN FORM ============ */}
+      <div className="login-panel">
+        <div className="login-panel-inner">
+
+          <div className="login-head">
+            <h2>Welcome back</h2>
+            <p>Login to your hotel dashboard.</p>
+          </div>
 
           <form onSubmit={handleSubmit} className="login-form">
 
@@ -142,6 +180,7 @@ function Login() {
                 onChange={handleChange}
                 placeholder="Enter your email"
                 className={errors.email ? 'error' : ''}
+                autoComplete="email"
               />
 
               {errors.email && (
@@ -156,14 +195,25 @@ function Login() {
                 <span>Password</span>
               </label>
 
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-                className={errors.password ? 'error' : ''}
-              />
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                  className={errors.password ? 'error' : ''}
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
 
               {errors.password && (
                 <span className="error-message">{errors.password}</span>
@@ -199,7 +249,7 @@ function Login() {
           </form>
 
           <div className="signup-link">
-            {/* Don’t have an account? <Link to="/signup">Sign up</Link> */}
+            Don't have an account? <a href="/signup" onClick={(e) => { e.preventDefault(); navigate('/signup'); }}>Sign up</a>
           </div>
         </div>
       </div>

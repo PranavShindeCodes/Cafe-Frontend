@@ -44,6 +44,7 @@ function AdminDashboard() {
   });
 
   const [hotelImagePreview, setHotelImagePreview] = useState(null);
+  const [hotelImageFile, setHotelImageFile] = useState(null);
 
   useEffect(() => {
     document.body.classList.toggle(
@@ -97,10 +98,21 @@ function AdminDashboard() {
   const handleHotelUpdate = async (e) => {
     e.preventDefault();
     try {
+      const data = new FormData();
+      data.append('hotelName', hotelForm.hotelName);
+      data.append('email', hotelForm.email);
+      data.append('address', hotelForm.address);
+      data.append('city', hotelForm.city);
+      data.append('state', hotelForm.state);
+
+      // Only send a new image when one was selected
+      if (hotelImageFile) {
+        data.append('hotelImage', hotelImageFile);
+      }
+
       const response = await fetch(`${HOTEL_API}/${hotel._id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(hotelForm),
+        body: data,
       });
 
       const result = await response.json();
@@ -108,7 +120,10 @@ function AdminDashboard() {
         setHotel(result.data);
         localStorage.setItem('hotelUser', JSON.stringify(result.data));
         setShowEditHotelModal(false);
+        setHotelImageFile(null);
         alert('Saved to Database Successfully!');
+      } else {
+        alert(result.message || "Failed to save to server.");
       }
     } catch (err) {
       alert("Failed to save to server.");
@@ -132,7 +147,7 @@ function AdminDashboard() {
     const reader = new FileReader();
     reader.onloadend = () => {
       setHotelImagePreview(reader.result);
-      setHotelForm(prev => ({ ...prev, hotelImage: reader.result }));
+      setHotelImageFile(file);
     };
     reader.readAsDataURL(file);
   };
@@ -179,10 +194,14 @@ function AdminDashboard() {
         formData.append("image", foodForm.image);
       }
 
-      const response = await fetch(API_URL, {
-        method: "POST",
-        body: formData,
-      });
+      // ✅ Update existing item instead of creating a duplicate
+      const response = await fetch(
+        editingFood ? `${API_URL}/${editingFood._id}` : API_URL,
+        {
+          method: editingFood ? "PUT" : "POST",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         alert(editingFood ? "Food updated!" : "Food added!");
@@ -282,7 +301,7 @@ function AdminDashboard() {
       {/* Header */}
       <div className="dashboard-header">
         <div className="header-left">
-          <Utensils size={24} color="#e67e22" />
+          <Utensils size={24} color="#FC8019" />
           <h1>{hotel.hotelName} Portal</h1>
         </div>
 
@@ -300,7 +319,14 @@ function AdminDashboard() {
         <div className="hotel-profile-section">
           <div className="hotel-profile-card">
             <div className="hotel-cover-image">
-              <img src={hotel.hotelImage || 'https://via.placeholder.com/1200x300'} alt={hotel.hotelName} />
+              <img
+                src={hotel.hotelImage || '/hotel-cover.svg'}
+                alt={hotel.hotelName}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/hotel-cover.svg';
+                }}
+              />
               <button
                 className="edit-cover-btn"
                 onClick={() => {
@@ -400,35 +426,38 @@ function AdminDashboard() {
           </div>
         </div>
 
-        <button
-          className="booking-page-btn"
-          onClick={() => navigate("/booking")}
-        >
-          Manage Tables
-        </button>
-                      
-        {hotel.hotelType === "hotel_with_lodging" && (
+        {/* Quick Actions */}
+        <div className="admin-actions">
           <button
             className="booking-page-btn"
-            onClick={() => navigate("/rooms")}
+            onClick={() => navigate("/booking")}
           >
-            Manage Rooms
+            🍽 Manage Tables
           </button>
-        )}
 
-        <button
-          className="booking-page-btn"
-          onClick={() => navigate(`/kot/${hotel._id}/all`)}
-        >
-          KOT
-        </button>
+          {hotel.hotelType === "hotel_with_lodging" && (
+            <button
+              className="booking-page-btn"
+              onClick={() => navigate("/rooms")}
+            >
+              🛎 Manage Rooms
+            </button>
+          )}
 
-        <button
-          className="generate-qr-btn"
-          onClick={() => navigate("/generate-qr")}
-        >
-          Generate Table QR Codes
-        </button>
+          <button
+            className="booking-page-btn"
+            onClick={() => navigate(`/kot/${hotel._id}/all`)}
+          >
+            🍳 Kitchen (KOT)
+          </button>
+
+          <button
+            className="generate-qr-btn"
+            onClick={() => navigate("/generate-qr")}
+          >
+            📱 Generate Table QR Codes
+          </button>
+        </div>
 
 
         {/* Food Management Section */}
@@ -631,7 +660,8 @@ function AdminDashboard() {
                         className="remove-image"
                         onClick={() => {
                           setHotelImagePreview(null);
-                          setHotelForm({ ...hotelForm, hotelImage: '' });
+                          setHotelImageFile(null);
+                          setHotelForm({ ...hotelForm, hotelImage: hotel.hotelImage });
                         }}
                       >
                         <X size={16} />
@@ -733,7 +763,6 @@ function AdminDashboard() {
                     <option value="rice">Rice</option>
                     <option value="roti">Roti</option>
                     <option value="starter">Starter</option>
-                    <option value="drinks">Drinks</option>
                     <option value="drinks">Drinks</option>
                   </select>
                 </div>

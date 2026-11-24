@@ -5,9 +5,11 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './admin.css';
+import { useAuth } from '../context/AuthContext';
 
 function AdminDashboard() {
   const navigate = useNavigate();
+  const { user, logout, updateUser } = useAuth();
 
   // ✅ CENTRAL BACKEND
   const API = process.env.REACT_APP_API;
@@ -57,17 +59,12 @@ function AdminDashboard() {
     };
   }, [showFoodModal, showEditHotelModal]);
 
-  // 🔐 Auth Check
+  // 🔐 Auth state comes from ProtectedRoute + AuthContext
   useEffect(() => {
-    const savedUser = localStorage.getItem("hotelUser");
-
-    if (!savedUser) {
-      navigate("/login");
-    } else {
-      const currentHotel = JSON.parse(savedUser);
-      setHotel(currentHotel);
+    if (user) {
+      setHotel(user);
     }
-  }, [navigate]);
+  }, [user]);
 
   // 📥 Fetch Foods
   const fetchFoods = useCallback(async () => {
@@ -90,8 +87,8 @@ function AdminDashboard() {
   }, [fetchFoods]);
 
   const handleLogout = () => {
-    localStorage.removeItem('hotelUser');
-    navigate('/login');
+    logout();
+    navigate('/login', { replace: true });
   };
 
   // 🏨 Update Hotel
@@ -118,7 +115,7 @@ function AdminDashboard() {
       const result = await response.json();
       if (result.success) {
         setHotel(result.data);
-        localStorage.setItem('hotelUser', JSON.stringify(result.data));
+        updateUser(result.data);
         setShowEditHotelModal(false);
         setHotelImageFile(null);
         alert('Saved to Database Successfully!');

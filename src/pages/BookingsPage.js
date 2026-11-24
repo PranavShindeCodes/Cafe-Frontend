@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "./bookings.css";
+import { useAuth } from "../context/AuthContext";
 
 const API = process.env.REACT_APP_API;
 
 function BookingsPage() {
 
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [hotel, setHotel] = useState(null);
   const [bookings, setBookings] = useState([]);
@@ -30,21 +32,10 @@ const [selectedRoom, setSelectedRoom] = useState("");
 const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-
-    const storedHotel = localStorage.getItem("hotelUser");
-
-    if (!storedHotel) {
-      navigate("/login");
-      return;
+    if (user) {
+      setHotel(user);
     }
-
-    try {
-      setHotel(JSON.parse(storedHotel));
-    } catch {
-      navigate("/login");
-    }
-
-  }, [navigate]);
+  }, [user]);
 
   useEffect(() => {
 

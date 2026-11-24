@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Hotel, Mail, Lock, MapPin, Building, Globe, ArrowRight,
   Camera, Upload, X, Image as ImageIcon, Users,
@@ -6,9 +6,17 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './signup.css';
+import { useAuth } from '../context/AuthContext';
 
 function Signup() {
   const navigate = useNavigate();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      navigate('/admin', { replace: true });
+    }
+  }, [authLoading, isAuthenticated, navigate]);
   const [formData, setFormData] = useState({
     hotelName: '',
     email: '',

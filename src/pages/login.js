@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Hotel, Mail, Lock, LogIn, X, Eye, EyeOff,
   QrCode, ChefHat, ConciergeBell, UtensilsCrossed,
 } from 'lucide-react';
 import './login.css';
-import {  useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, isAuthenticated, isLoading: authLoading } = useAuth();
 
   // ✅ CENTRAL BACKEND
   const API = process.env.REACT_APP_API;
@@ -21,6 +24,12 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      navigate('/admin', { replace: true });
+    }
+  }, [authLoading, isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -85,11 +94,12 @@ function Login() {
       }
 
       if (result.success) {
-        // ✅ Store hotel data safely
-        localStorage.setItem('hotelUser', JSON.stringify(result.data));
+        // ✅ Store auth state via centralized context (also keeps legacy key for compatibility)
+        login(result.data);
 
-        // ✅ Redirect to admin
-        navigate('/admin');
+        // ✅ Redirect to requested page or admin
+        const from = location.state?.from?.pathname;
+        navigate(from && from !== '/login' ? from : '/admin', { replace: true });
       } else {
         setErrors({ server: result.message || "Invalid credentials" });
       }

@@ -1,32 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
 import "./generateqr.css";
+import { useAuth } from "../context/AuthContext";
 
 function GenerateQR() {
 
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const FRONTEND_URL = window.location.origin;
 
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [showToast, setShowToast] = useState(false);
-  const [savedUser, setSavedUser] = useState(null);
 
-  // ✅ Auth Check
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("hotelUser"));
+  if (!user) return null;
 
-    if (!user) {
-      navigate("/login");
-    } else {
-      setSavedUser(user);
-    }
-  }, [navigate]);
-
-  if (!savedUser) return null;
-
-  const { _id, sections = [], hotelName, roomCount = 0 } = savedUser;
+  const { _id, sections = [], hotelName, roomCount = 0 } = user;
 
   const rooms = Array.from({ length: Number(roomCount) || 0 }, (_, i) => ({
     roomNumber: `R${i + 1}`
